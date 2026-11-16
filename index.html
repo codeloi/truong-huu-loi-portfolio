@@ -138,6 +138,47 @@ footer{text-align:center;padding:30px 24px;font-size:14px;color:var(--muted);bac
   .tl{padding-left:18px}
   .tl li::before{left:-27px}
 }
+/* ---------- Chat assistant ---------- */
+.chat-fab{position:fixed;right:20px;bottom:20px;z-index:40;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;background:var(--ink);color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(36,50,58,.28);transition:transform .2s,background .2s}
+.chat-fab:hover{transform:translateY(-3px);background:var(--accent-dark)}
+.chat-fab svg{width:26px;height:26px}
+.chat-fab .dot{position:absolute;top:6px;right:6px;width:12px;height:12px;border-radius:50%;background:#f4a7b9;border:2px solid #fff}
+.chat-panel{padding:0;position:fixed;right:20px;bottom:90px;z-index:40;width:376px;max-width:calc(100vw - 24px);height:540px;max-height:calc(100vh - 110px);background:#fff;border-radius:22px;box-shadow:0 18px 50px rgba(36,50,58,.25);display:flex;flex-direction:column;overflow:hidden;animation:rise .35s cubic-bezier(.2,.7,.2,1)}
+.chat-panel[hidden]{display:none}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:var(--rose)}
+.chat-head strong{display:block;font-family:var(--head);font-weight:400;font-size:18px;letter-spacing:.04em}
+.chat-head small{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.chat-actions{display:flex;gap:6px}
+.chat-actions button{border:0;background:#fff;border-radius:999px;min-width:34px;height:34px;padding:0 10px;cursor:pointer;font:500 13px var(--body);color:var(--ink);box-shadow:0 1px 4px rgba(36,50,58,.1)}
+.chat-actions button:hover{background:var(--pill-mint)}
+.chat-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fbfbfb;scroll-behavior:smooth}
+.msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:15px;line-height:1.55;word-wrap:break-word;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-top-left-radius:4px}
+.msg.user{align-self:flex-end;background:var(--ink);color:#fff;border-top-right-radius:4px}
+.msg strong{font-weight:700}
+.msg a{color:var(--accent-dark);font-weight:500}
+.msg code{background:#eef3f2;border-radius:5px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace}
+.msg pre{margin:8px 0 2px;background:#1f2a30;color:#e8f1ef;border-radius:10px;padding:10px 12px;overflow-x:auto;font-size:12.5px;line-height:1.5}
+.msg pre code{background:none;padding:0;color:inherit;font-size:inherit}
+.typing{display:inline-flex;gap:4px;align-items:center;height:18px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9bb;animation:blink 1s infinite ease-in-out}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.chat-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;border-top:1px solid var(--line);background:#fff;scrollbar-width:thin}
+.chat-chips:empty{display:none}
+.chat-chips button{flex:0 0 auto;border:1px solid #cfe3de;background:var(--mint);color:var(--accent-dark);border-radius:999px;padding:6px 12px;font:500 13px var(--body);cursor:pointer;white-space:nowrap}
+.chat-chips button:hover{background:var(--pill-mint)}
+.chat-form{display:flex;gap:8px;padding:10px 12px 12px;background:#fff;border-top:1px solid var(--line)}
+.chat-form input{flex:1;min-width:0;border:1px solid #d6dcde;border-radius:999px;padding:10px 16px;font:15px var(--body);color:var(--ink)}
+.chat-form input:focus{outline:3px solid #bfe5dd;border-color:#7cc7bb}
+.chat-form button{border:0;border-radius:50%;width:42px;height:42px;background:var(--accent-dark);color:#fff;cursor:pointer;font-size:18px}
+.chat-form button:hover{background:var(--ink)}
+@media (max-width:640px){
+  .chat-fab{right:14px;bottom:14px}
+  .chat-panel{right:12px;left:12px;width:auto;bottom:84px;height:min(560px,calc(100vh - 100px))}
+}
+@media print{.chat-fab,.chat-panel{display:none!important}}
+
 /* Motion: reveal on scroll + hero entrance */
 .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .js .reveal.in{opacity:1;transform:none}
@@ -280,6 +321,26 @@ footer{text-align:center;padding:30px 24px;font-size:14px;color:var(--muted);bac
 
 <footer>© 2026 Truong Huu Loi · Built with curiosity and generative AI.</footer>
 
+<button class="chat-fab" id="chatFab" type="button" aria-label="Open chat assistant" aria-expanded="false" aria-controls="chatPanel">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke-width="2.6"/></svg>
+  <span class="dot" aria-hidden="true"></span>
+</button>
+<section class="chat-panel" id="chatPanel" role="dialog" aria-label="Portfolio assistant" hidden>
+  <header class="chat-head">
+    <div><strong id="chatTitle">Ask about Loi</strong><small id="chatSub">Answers from prepared notes</small></div>
+    <div class="chat-actions">
+      <button type="button" id="chatLang" aria-label="Switch language">VI</button>
+      <button type="button" id="chatClose" aria-label="Close chat">&times;</button>
+    </div>
+  </header>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <form class="chat-form" id="chatForm" autocomplete="off">
+    <input id="chatInput" type="text" maxlength="300" placeholder="Type a question..." aria-label="Your question">
+    <button type="submit" aria-label="Send">&#10148;</button>
+  </form>
+</section>
+
 <script>
 /* Fill in your real contact details here. Empty values are hidden automatically. */
 const CONTACT = {
@@ -289,6 +350,8 @@ const CONTACT = {
   github: "https://github.com/codeloi",
   source: "https://github.com/codeloi/truong-huu-loi-portfolio"
 };
+/* Chat AI: paste your Cloudflare Worker URL here to enable free-form AI chat. Leave empty to use the built-in notes only. */
+const CHAT_API = "https://loi-portfolio-chat.loitruong2612002.workers.dev";
 (function(){
   const box = document.getElementById('links');
   const items = [
@@ -356,6 +419,337 @@ const CONTACT = {
     }, { rootMargin: '-45% 0px -50% 0px' });
     map.forEach((_, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
   }
+})();
+
+/* ---------- Chat assistant (rule-based, no server, no API key) ---------- */
+(function(){
+  const $ = (id) => document.getElementById(id);
+  const fab = $('chatFab'), panel = $('chatPanel'), log = $('chatLog'), chips = $('chatChips');
+  const form = $('chatForm'), input = $('chatInput'), langBtn = $('chatLang'), closeBtn = $('chatClose');
+  if (!fab || !panel) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lang = (navigator.language || 'en').toLowerCase().startsWith('vi') ? 'vi' : 'en';
+  let opened = false, busy = false;
+  const API = (typeof CHAT_API === 'string' && /^https:\/\//.test(CHAT_API)) ? CHAT_API : '';
+  const hist = [];
+
+  const UI = {
+    en: { title:'Ask about Loi', sub:'Answers from prepared notes, not a live AI', ph:'Type a question...', open:'Open chat assistant', close:'Close chat', toggle:'VI', switchLabel:'Chuyển sang tiếng Việt',
+          hello:"Hi! I'm the assistant on Loi's portfolio. Ask me about **Loi's background, work and research**, or about **study topics** like SQL, Python, ETL, Power BI, machine learning, NLP and generative AI. You can write in English or Vietnamese.",
+          fallback:"I don't have that in my notes. I can answer questions about Loi (experience, education, research, skills, contact) and study topics such as SQL, Python, ETL, Power BI, statistics, machine learning, NLP, generative AI, Git and study tips. Try one of the suggestions below.",
+          more:'More topics', subAI:'AI assistant, answers may contain mistakes',
+          helloAI:"Hi! I'm the AI assistant on Loi's portfolio. Ask me anything about **Loi's background and research**, or chat about **study topics** like SQL, Python, ETL, Power BI, statistics, machine learning, NLP and generative AI. Type your own question or tap a suggestion.",
+          offline:'The AI service is not available right now, so I answered from my built-in notes.' },
+    vi: { title:'Hỏi về Lợi', sub:'Trả lời từ ghi chú soạn sẵn, không phải AI trực tiếp', ph:'Nhập câu hỏi...', open:'Mở trợ lý chat', close:'Đóng chat', toggle:'EN', switchLabel:'Switch to English',
+          hello:"Xin chào! Mình là trợ lý trên portfolio của Lợi. Bạn có thể hỏi về **kinh nghiệm, công việc và nghiên cứu của Lợi**, hoặc các **chủ đề học tập** như SQL, Python, ETL, Power BI, machine learning, NLP và AI tạo sinh. Bạn gõ tiếng Việt hay tiếng Anh đều được.",
+          fallback:"Mình chưa có thông tin này trong ghi chú. Mình trả lời được về Lợi (kinh nghiệm, học vấn, nghiên cứu, kỹ năng, liên hệ) và các chủ đề học như SQL, Python, ETL, Power BI, thống kê, machine learning, NLP, AI tạo sinh, Git và phương pháp học. Bạn thử một gợi ý bên dưới nhé.",
+          more:'Chủ đề khác', subAI:'Trợ lý AI, câu trả lời có thể chưa chính xác',
+          helloAI:"Xin chào! Mình là trợ lý AI trên portfolio của Lợi. Bạn cứ hỏi tự do về **nền tảng và nghiên cứu của Lợi**, hoặc trò chuyện về các **chủ đề học tập** như SQL, Python, ETL, Power BI, thống kê, machine learning, NLP và AI tạo sinh. Bạn có thể tự gõ câu hỏi hoặc chọn một gợi ý.",
+          offline:'Dịch vụ AI hiện chưa sẵn sàng nên mình trả lời từ ghi chú có sẵn.' }
+  };
+
+  /* ---- helpers ---- */
+  const esc = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  function fmt(s){
+    let h = esc(s);
+    h = h.replace(/```(\w*)\n([\s\S]*?)```/g, (m,l,c) => '<pre><code>' + c.replace(/\n$/,'') + '</code></pre>');
+    h = h.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+    h = h.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+    h = h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+|tel:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return h.split(/(<pre>[\s\S]*?<\/pre>)/).map(p => p.indexOf('<pre>') === 0 ? p :
+      p.replace(/(^|\n)#{1,4} /g, '$1').replace(/(^|\n)[-*] /g, '$1\u2022 ').replace(/\n{3,}/g, '\n\n').replace(/\n/g,'<br>')).join('');
+  }
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d')
+    .replace(/[^a-z0-9\u4e00-\u9fff\s]/g,' ').replace(/\s+/g,' ').trim();
+  const VI_CHARS = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+  const VI_WORDS = ['toi','ban','gi','nao','nhu','lam','dau','hoc','khong','cua','nhung','sao','giup','kinh','nghiem','la','co','duoc','nhe','minh','cho','biet','hay','muon','xin','chao'];
+  function detect(raw, tokens){
+    if (VI_CHARS.test(raw)) return 'vi';
+    const hits = tokens.filter(t => VI_WORDS.indexOf(t) > -1).length;
+    return hits >= 1 && (hits >= 2 || tokens.length <= 4) ? 'vi' : 'en';
+  }
+
+  /* ---- knowledge base ---- */
+  const contactAnswer = () => {
+    const c = CONTACT, a = [], b = [];
+    if (c.email)    { a.push('- Email: [' + c.email + '](mailto:' + c.email + ')'); }
+    if (c.phone)    { a.push('- Phone: [' + c.phone + '](tel:' + c.phone.replace(/\s+/g,'') + ')'); }
+    if (c.linkedin) { a.push('- [LinkedIn](' + c.linkedin + ')'); }
+    if (c.github)   { a.push('- [GitHub](' + c.github + ')'); }
+    return a.join('\n');
+  };
+
+  const KB = [
+  /* ===== about Loi ===== */
+  { id:'greet', tags:['hello','hi','hey','xin chao','chao','alo','good morning','good afternoon'],
+    title:{en:'Say hello',vi:'Chào hỏi'},
+    en:"Hello! What would you like to know about Loi or about a study topic?",
+    vi:"Xin chào! Bạn muốn hỏi gì về Lợi hoặc một chủ đề học tập?", next:['who','skills','sql'] },
+  { id:'who', tags:['who is loi','who is he','about loi','about him','tell me about loi','introduce loi','introduce','ai la loi','gioi thieu','gioi thieu ve loi','loi la ai','profile','summary','tom tat'],
+    title:{en:'Who is Loi?',vi:'Lợi là ai?'},
+    en:"**Truong Huu Loi (張友利)** is a Data Analyst and Process Data Analyst based in Ho Chi Minh City. He builds clearer reporting systems and stronger data pipelines with SQL, Python and BI, and he is continuing his studies at CGU.",
+    vi:"**Trương Hữu Lợi (張友利)** là Data Analyst và Process Data Analyst, sống tại TP. Hồ Chí Minh. Lợi xây dựng hệ thống báo cáo rõ ràng hơn và data pipeline vững chắc hơn bằng SQL, Python và BI, hiện đang học tiếp tại CGU.",
+    next:['exp','edu','research'] },
+  { id:'name', tags:['chinese name','name','full name','ten tieng trung','ten tieng anh','ten day du','ten gi','student id','ma so sinh vien','mssv','student number','張友利'],
+    title:{en:'Name and student ID',vi:'Tên và mã sinh viên'},
+    en:"Name (EN): **Truong Huu Loi**\nName (中文): **張友利**\nStudent ID: **M1561023**",
+    vi:"Tên (EN): **Truong Huu Loi**\nTên (中文): **張友利**\nMã số sinh viên: **M1561023**", next:['who','contact'] },
+  { id:'exp', tags:['experience','work experience','background','career','kinh nghiem','kinh nghiem lam viec','cong viec','work history','da lam o dau'],
+    title:{en:'Experience',vi:'Kinh nghiệm'},
+    en:"**Process Data Analyst**, JAPFA Comfeed Vietnam (Feb 2025 to present)\n**Data Engineer Intern**, ESTEC Vietnam (Aug to Nov 2024)\n\nAsk me about either role for details.",
+    vi:"**Process Data Analyst**, JAPFA Comfeed Vietnam (từ 02/2025)\n**Data Engineer Intern**, ESTEC Vietnam (08 đến 11/2024)\n\nBạn có thể hỏi chi tiết từng vị trí.", next:['job','intern','skills'] },
+  { id:'job', tags:['japfa','japfa comfeed','current job','current role','process data analyst','cong viec hien tai','dang lam o dau','lam o dau','lam viec o dau','lam cho nao','where does loi work','where does he work','dang lam gi','cong ty hien tai','what does loi do'],
+    title:{en:'Current job at JAPFA',vi:'Công việc ở JAPFA'},
+    en:"Since **Feb 2025** Loi is a **Process Data Analyst at JAPFA Comfeed Vietnam**. The work covers:\n- analysing workflow logs\n- monitoring data quality\n- building SQL and Python reports\n- forecasting trends\n- proposing operational improvements",
+    vi:"Từ **02/2025**, Lợi là **Process Data Analyst tại JAPFA Comfeed Vietnam**. Công việc gồm:\n- phân tích log quy trình\n- giám sát chất lượng dữ liệu\n- xây dựng báo cáo bằng SQL và Python\n- dự báo xu hướng\n- đề xuất cải tiến vận hành", next:['intern','dq','sql'] },
+  { id:'intern', tags:['estec','intern','internship','thuc tap','data engineer intern','thuc tap sinh'],
+    title:{en:'Internship at ESTEC',vi:'Thực tập ở ESTEC'},
+    en:"**Data Engineer Intern, ESTEC Vietnam** (Aug to Nov 2024): wrote T-SQL, built ETL processes, modelled data with SQL and Power BI, and created KPI dashboards.",
+    vi:"**Data Engineer Intern, ESTEC Vietnam** (08 đến 11/2024): viết T-SQL, xây dựng quy trình ETL, mô hình hóa dữ liệu bằng SQL và Power BI, và tạo dashboard KPI.", next:['etl','powerbi','job'] },
+  { id:'edu', tags:['education','study','studies','university','degree','school','gpa','hoc van','truong','dai hoc','bang cap','tot nghiep','cgu','graduate','hoc o dau','dang hoc'],
+    title:{en:'Education',vi:'Học vấn'},
+    en:"**B.Sc. in Data Science** (2020 to 2025), Ho Chi Minh City University of Industry, GPA **3.11 / 4.0**. Thesis: machine learning and NLP for FOMC decisions and VND rates.\nLoi is now continuing his studies at **CGU**.",
+    vi:"**Cử nhân Khoa học dữ liệu** (2020 đến 2025), Ho Chi Minh City University of Industry, GPA **3.11 / 4.0**. Luận văn: machine learning và NLP cho các quyết định của FOMC và tỷ giá, lãi suất VND.\nHiện Lợi đang học tiếp tại **CGU**.", next:['research','exp','roadmap'] },
+  { id:'research', tags:['research','paper','thesis','luan van','nghien cuu','bai bao','publication','co author','nguyen tran quoc bao','project','projects','du an'],
+    title:{en:'Research paper',vi:'Bài nghiên cứu'},
+    en:"**Exploring the Role of FOMC Decisions on VND Interest Rates and Exchange Rates**, written at Ho Chi Minh City University of Industry with co-author Nguyen Tran Quoc Bao. It uses machine learning and NLP. Ask me to explain FOMC, NLP or machine learning.",
+    vi:"**Exploring the Role of FOMC Decisions on VND Interest Rates and Exchange Rates**, thực hiện tại Ho Chi Minh City University of Industry cùng đồng tác giả Nguyen Tran Quoc Bao. Bài dùng machine learning và NLP. Bạn có thể hỏi mình giải thích FOMC, NLP hay machine learning.", next:['fomc','nlp','ml'] },
+  { id:'skills', tags:['skill','skills','tools','tool','tech stack','technology','ky nang','cong cu','biet gi','lam duoc gi voi du lieu','what can loi do'],
+    title:{en:'Skills and tools',vi:'Kỹ năng và công cụ'},
+    en:"**SQL / T-SQL**, **Python**, **ETL**, **Power BI**, **machine learning** and **NLP**, plus data-quality monitoring and KPI dashboards.",
+    vi:"**SQL / T-SQL**, **Python**, **ETL**, **Power BI**, **machine learning** và **NLP**, cùng giám sát chất lượng dữ liệu và dashboard KPI.", next:['sql','python','powerbi'] },
+  { id:'contact', tags:['contact','email','mail','phone','linkedin','github','lien he','so dien thoai','hire','hiring','tuyen dung','hop tac','work together','reach','sdt','gmail'],
+    title:{en:'Contact',vi:'Liên hệ'},
+    en:() => "You can reach Loi here:\n" + contactAnswer(),
+    vi:() => "Bạn có thể liên hệ Lợi qua:\n" + contactAnswer(), next:['location','cv'] },
+  { id:'location', tags:['where is loi','where does loi live','where is he based','location','based','city','address','o dau','thu duc','ho chi minh','dia chi','sai gon'],
+    title:{en:'Location',vi:'Nơi ở'},
+    en:"Loi is based in **Thu Duc, Ho Chi Minh City**, Vietnam.",
+    vi:"Lợi sống tại **Thủ Đức, TP. Hồ Chí Minh**, Việt Nam.", next:['contact'] },
+  { id:'cv', tags:['cv','resume','ly lich','download cv','tai cv'],
+    title:{en:'CV / resume',vi:'CV'},
+    en:"This site has no downloadable CV. The timeline above covers experience and education, and Loi's LinkedIn has more. Use the contact links to ask for a copy.",
+    vi:"Trang này không có CV tải về. Phần timeline ở trên có kinh nghiệm và học vấn, và LinkedIn của Lợi có thêm chi tiết. Bạn dùng liên kết liên hệ để xin bản CV nhé.", next:['contact'] },
+  { id:'site', tags:['website','this site','this website','built','made','how was this made','source code','repo','repository','trang web','web nay','ai tao ra','lam bang gi','duoc lam'],
+    title:{en:'How this site was made',vi:'Trang này được làm thế nào'},
+    en:"A single static page (HTML, CSS and a little JavaScript) hosted on GitHub Pages. It was designed and revised together with generative AI, with Loi reviewing and correcting the content. [Source code](https://github.com/codeloi/truong-huu-loi-portfolio)",
+    vi:"Một trang tĩnh duy nhất (HTML, CSS và chút JavaScript) chạy trên GitHub Pages. Trang được thiết kế và chỉnh sửa cùng AI tạo sinh, còn Lợi kiểm tra và sửa nội dung. [Mã nguồn](https://github.com/codeloi/truong-huu-loi-portfolio)", next:['genai','git'] },
+  { id:'bot', tags:['who are you','are you ai','are you real','are you human','chatbot','bot','ban la ai','ban la bot','ban la chatgpt','ban co phai ai','ai that khong','gpt','are you chatgpt'],
+    title:{en:'About this assistant',vi:'Về trợ lý này'},
+    en:"I'm the assistant built into this portfolio. I'm **not a live AI model**: I match your question against notes prepared in advance about Loi and about study topics. For anything outside them, please use the contact links.",
+    vi:"Mình là trợ lý tích hợp trong portfolio này. Mình **không phải mô hình AI trực tiếp**: mình đối chiếu câu hỏi của bạn với các ghi chú soạn sẵn về Lợi và về các chủ đề học tập. Với nội dung ngoài đó, bạn hãy dùng liên kết liên hệ nhé.", next:['help','who'] },
+  { id:'private', tags:['age','salary','luong','tuoi','bao nhieu tuoi','girlfriend','married','ket hon','nguoi yeu','religion','political','home address','nha o','password','mat khau','cmnd','cccd','passport'],
+    title:{en:'Private questions',vi:'Câu hỏi riêng tư'},
+    en:"I only share what is already public on this site. For anything personal, please reach out to Loi directly.",
+    vi:"Mình chỉ chia sẻ thông tin đã công khai trên trang này. Với những điều riêng tư, bạn hãy liên hệ trực tiếp với Lợi nhé.", next:['contact'] },
+  { id:'help', tags:['help','what can you do','how to use','huong dan','giup toi','ban lam duoc gi','ban biet gi','menu','topics','chu de'],
+    title:{en:'What can you do?',vi:'Bạn làm được gì?'},
+    en:"Ask me about:\n- **Loi**: experience, education, research, skills, contact\n- **Study topics**: SQL, Python, ETL, Power BI, data quality, statistics, machine learning, NLP, generative AI, FOMC and VND, Git and GitHub Pages\n- **Learning**: a data-analyst roadmap and study tips",
+    vi:"Bạn có thể hỏi về:\n- **Lợi**: kinh nghiệm, học vấn, nghiên cứu, kỹ năng, liên hệ\n- **Chủ đề học tập**: SQL, Python, ETL, Power BI, chất lượng dữ liệu, thống kê, machine learning, NLP, AI tạo sinh, FOMC và VND, Git và GitHub Pages\n- **Cách học**: lộ trình trở thành data analyst và phương pháp học", next:['sql','ml','roadmap'] },
+  { id:'thanks', tags:['thanks','thank you','thank','cam on','cảm on','tks','thx','great','tuyet'],
+    title:{en:'Thanks',vi:'Cảm ơn'},
+    en:"You're welcome! Ask me anything else about Loi or the study topics.",
+    vi:"Không có gì! Bạn cứ hỏi thêm về Lợi hoặc các chủ đề học tập nhé.", next:['help'] },
+  { id:'bye', tags:['bye','goodbye','see you','tam biet','hen gap lai','bai bai'],
+    title:{en:'Goodbye',vi:'Tạm biệt'},
+    en:"Goodbye! Thanks for visiting Loi's portfolio.",
+    vi:"Tạm biệt! Cảm ơn bạn đã ghé portfolio của Lợi.", next:[] },
+
+  /* ===== study topics ===== */
+  { id:'sql', tags:['sql','truy van','query','queries','select','group by','having','where clause','t sql','tsql','database','databases','co so du lieu','sql server'],
+    title:{en:'SQL basics',vi:'SQL cơ bản'},
+    en:"**SQL** lets you ask questions of tables. The core pattern:\n```sql\nSELECT region, SUM(revenue) AS total\nFROM sales\nWHERE order_date >= '2026-01-01'\nGROUP BY region\nHAVING SUM(revenue) > 10000\nORDER BY total DESC;\n```\nLogical order to remember: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY. T-SQL is Microsoft's dialect for SQL Server.",
+    vi:"**SQL** giúp bạn đặt câu hỏi lên các bảng dữ liệu. Mẫu cơ bản:\n```sql\nSELECT region, SUM(revenue) AS total\nFROM sales\nWHERE order_date >= '2026-01-01'\nGROUP BY region\nHAVING SUM(revenue) > 10000\nORDER BY total DESC;\n```\nThứ tự xử lý cần nhớ: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY. T-SQL là phiên bản SQL của Microsoft (SQL Server).",
+    next:['sql_join','sql_window','dq'] },
+  { id:'sql_join', tags:['join','joins','sql join','inner join','left join','right join','full join','ket bang','noi bang'],
+    title:{en:'SQL JOIN',vi:'SQL JOIN'},
+    en:"A JOIN combines rows from two tables using a key:\n- **INNER JOIN**: only rows that match in both\n- **LEFT JOIN**: all rows from the left table, NULL where nothing matches\n- **FULL JOIN**: all rows from both\n```sql\nSELECT c.name, o.total\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id;\n```\nTip: add `WHERE o.id IS NULL` to find customers with no orders.",
+    vi:"JOIN ghép các dòng của hai bảng theo một khóa:\n- **INNER JOIN**: chỉ lấy dòng khớp ở cả hai bảng\n- **LEFT JOIN**: lấy mọi dòng bảng trái, NULL nếu không khớp\n- **FULL JOIN**: lấy mọi dòng của cả hai\n```sql\nSELECT c.name, o.total\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id;\n```\nMẹo: thêm `WHERE o.id IS NULL` để tìm khách chưa có đơn hàng.",
+    next:['sql','sql_window'] },
+  { id:'sql_window', tags:['window function','window functions','row number','rank','over partition','partition by','lag','lead','running total','ham cua so','xep hang'],
+    title:{en:'SQL window functions',vi:'Window function'},
+    en:"Window functions calculate across related rows **without collapsing them**:\n```sql\nSELECT employee, dept, salary,\n  RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS rnk,\n  AVG(salary) OVER (PARTITION BY dept) AS dept_avg\nFROM staff;\n```\nCommon uses: rankings, running totals (`SUM(x) OVER (ORDER BY d)`) and period-over-period change with `LAG()`.",
+    vi:"Window function tính toán trên các dòng liên quan mà **không gộp dòng**:\n```sql\nSELECT employee, dept, salary,\n  RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS rnk,\n  AVG(salary) OVER (PARTITION BY dept) AS dept_avg\nFROM staff;\n```\nDùng nhiều cho: xếp hạng, tổng lũy kế (`SUM(x) OVER (ORDER BY d)`) và so sánh kỳ trước bằng `LAG()`.",
+    next:['sql_join','sql','python'] },
+  { id:'python', tags:['python','pandas','dataframe','numpy','clean data','data cleaning','lam sach du lieu','phan tich du lieu bang python','matplotlib','seaborn','jupyter'],
+    title:{en:'Python for data',vi:'Python cho dữ liệu'},
+    en:"For data analysis, start with **pandas**:\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\"sales.csv\", parse_dates=[\"order_date\"])\ndf = df.drop_duplicates().dropna(subset=[\"revenue\"])\nmonthly = df.groupby(df[\"order_date\"].dt.to_period(\"M\"))[\"revenue\"].sum()\nprint(monthly.tail())\n```\nLearn `groupby`, `merge`, `pivot_table`, then plotting with matplotlib or seaborn.",
+    vi:"Để phân tích dữ liệu, hãy bắt đầu với **pandas**:\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\"sales.csv\", parse_dates=[\"order_date\"])\ndf = df.drop_duplicates().dropna(subset=[\"revenue\"])\nmonthly = df.groupby(df[\"order_date\"].dt.to_period(\"M\"))[\"revenue\"].sum()\nprint(monthly.tail())\n```\nHọc `groupby`, `merge`, `pivot_table`, rồi vẽ biểu đồ bằng matplotlib hoặc seaborn.",
+    next:['sql','ml','dq'] },
+  { id:'etl', tags:['etl','elt','pipeline','data pipeline','pipelines','extract transform load','kho du lieu','data warehouse','warehouse','ssis','airflow','dbt'],
+    title:{en:'ETL and pipelines',vi:'ETL và pipeline'},
+    en:"**ETL** = Extract (pull from sources), Transform (clean, join, reshape), Load (into a warehouse). **ELT** loads raw data first and transforms inside the warehouse, which is common in the cloud.\nGood pipelines can be re-run safely, include data-quality checks, log what they do, and use clear naming. Typical tools: SQL/T-SQL, SSIS, Python scripts, dbt, Airflow.",
+    vi:"**ETL** = Extract (lấy từ nguồn), Transform (làm sạch, ghép, định dạng lại), Load (nạp vào kho dữ liệu). **ELT** nạp dữ liệu thô trước rồi biến đổi ngay trong kho, phổ biến trên đám mây.\nPipeline tốt có thể chạy lại an toàn, có kiểm tra chất lượng dữ liệu, có ghi log và đặt tên rõ ràng. Công cụ thường gặp: SQL/T-SQL, SSIS, script Python, dbt, Airflow.",
+    next:['dq','sql','powerbi'] },
+  { id:'powerbi', tags:['power bi','powerbi','dashboard','dashboards','dax','star schema','bi','visualization','visualisation','chart','charts','bieu do','truc quan','truc quan hoa','kpi','power query'],
+    title:{en:'Power BI and dashboards',vi:'Power BI và dashboard'},
+    en:"Power BI workflow: connect, clean in **Power Query**, model, write **DAX** measures, then build visuals. Model data as a **star schema**: one fact table (sales, events) surrounded by dimension tables (date, product, customer).\nExample measure: `Total Revenue = SUM(Sales[Revenue])`\nDashboard tips: lead with 3 to 5 KPIs, one message per chart, few colours, clear labels.",
+    vi:"Quy trình Power BI: kết nối, làm sạch trong **Power Query**, mô hình hóa, viết measure **DAX**, rồi dựng biểu đồ. Hãy mô hình dữ liệu theo **star schema**: một bảng fact (bán hàng, sự kiện) bao quanh bởi các bảng dimension (ngày, sản phẩm, khách hàng).\nVí dụ measure: `Total Revenue = SUM(Sales[Revenue])`\nMẹo dashboard: mở đầu bằng 3 đến 5 KPI, mỗi biểu đồ một thông điệp, ít màu, nhãn rõ ràng.",
+    next:['etl','sql','stats'] },
+  { id:'dq', tags:['data quality','chat luong du lieu','missing values','missing data','duplicates','duplicate','outlier','outliers','validate','validation','data validation','gia tri thieu','trung lap'],
+    title:{en:'Data quality',vi:'Chất lượng dữ liệu'},
+    en:"Five checks to remember: **completeness** (missing values), **uniqueness** (duplicates), **validity** (formats and ranges), **consistency** (across systems) and **timeliness** (fresh enough).\nIn practice: profile the data, define rules, automate checks in the pipeline, alert on failures and track rates over time. Example duplicate check:\n```sql\nSELECT id, COUNT(*) FROM t GROUP BY id HAVING COUNT(*) > 1;\n```",
+    vi:"Năm tiêu chí cần nhớ: **đầy đủ** (giá trị thiếu), **duy nhất** (trùng lặp), **hợp lệ** (định dạng, khoảng giá trị), **nhất quán** (giữa các hệ thống) và **kịp thời** (đủ mới).\nTrong thực tế: khảo sát dữ liệu, đặt quy tắc, tự động hóa kiểm tra trong pipeline, cảnh báo khi lỗi và theo dõi tỷ lệ theo thời gian. Ví dụ kiểm tra trùng:\n```sql\nSELECT id, COUNT(*) FROM t GROUP BY id HAVING COUNT(*) > 1;\n```",
+    next:['etl','sql','python'] },
+  { id:'stats', tags:['statistics','statistic','thong ke','mean','median','p value','pvalue','correlation','hypothesis','hypothesis test','tuong quan','nhan qua','causation','standard deviation','do lech chuan','confidence interval','khoang tin cay','sampling'],
+    title:{en:'Statistics essentials',vi:'Thống kê cần biết'},
+    en:"Key ideas:\n- **Mean vs median**: the median resists outliers, so use it for skewed data such as income.\n- **Standard deviation** measures spread around the mean.\n- **Correlation is not causation**: two things moving together do not prove one causes the other.\n- **p-value**: the probability of seeing data at least this extreme if the null hypothesis were true. It is *not* the probability that the hypothesis is true.\n- A **confidence interval** shows the plausible range for an estimate, and it narrows as the sample grows.",
+    vi:"Ý chính:\n- **Mean và median**: median ít bị ảnh hưởng bởi ngoại lai, nên dùng cho dữ liệu lệch như thu nhập.\n- **Độ lệch chuẩn** đo độ phân tán quanh giá trị trung bình.\n- **Tương quan không phải nhân quả**: hai thứ cùng biến động không chứng minh cái này gây ra cái kia.\n- **p-value**: xác suất thấy dữ liệu cực đoan ít nhất như vậy nếu giả thuyết không (null) đúng. Nó *không* phải xác suất giả thuyết đúng.\n- **Khoảng tin cậy** cho biết khoảng hợp lý của ước lượng, và hẹp lại khi mẫu lớn hơn.",
+    next:['ml','python','dq'] },
+  { id:'ml', tags:['machine learning','ml','hoc may','supervised','unsupervised','overfitting','underfitting','train test','regression','classification','model','mo hinh','cross validation','accuracy','precision','recall','f1','random forest','scikit learn','sklearn'],
+    title:{en:'Machine learning basics',vi:'Machine learning cơ bản'},
+    en:"**Supervised learning** learns from labelled examples (regression predicts numbers, classification predicts classes). **Unsupervised learning** finds structure without labels (clustering).\nSplit data into train and test sets, start with a simple baseline, and watch for **overfitting** (great on training data, poor on new data). Metrics: MAE/RMSE for regression; precision, recall and F1 for classification.\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\n\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)\nmodel = LogisticRegression(max_iter=1000).fit(X_tr, y_tr)\nprint(model.score(X_te, y_te))\n```",
+    vi:"**Học có giám sát** học từ ví dụ có nhãn (hồi quy dự đoán số, phân loại dự đoán nhóm). **Học không giám sát** tìm cấu trúc khi không có nhãn (phân cụm).\nHãy chia dữ liệu thành tập train và test, bắt đầu bằng mô hình đơn giản làm mốc, và đề phòng **overfitting** (tốt trên dữ liệu học, kém trên dữ liệu mới). Thước đo: MAE/RMSE cho hồi quy; precision, recall và F1 cho phân loại.\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LogisticRegression\n\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)\nmodel = LogisticRegression(max_iter=1000).fit(X_tr, y_tr)\nprint(model.score(X_te, y_te))\n```",
+    next:['nlp','stats','python'] },
+  { id:'nlp', tags:['nlp','natural language','natural language processing','xu ly ngon ngu','xu ly ngon ngu tu nhien','tokenization','tokenize','tf idf','tfidf','embedding','embeddings','sentiment','text mining','bert','transformer','transformers','text classification'],
+    title:{en:'NLP basics',vi:'NLP cơ bản'},
+    en:"**NLP** turns text into something a model can use. A typical pipeline: clean the text, **tokenize** it, represent it (bag-of-words or **TF-IDF**, then **embeddings**), then train a model for tasks like sentiment, classification or topic discovery.\nModern systems use **transformers** (BERT, large language models). NLP is often applied to texts such as central-bank statements to turn wording into features that can be studied alongside numbers.",
+    vi:"**NLP** biến văn bản thành dạng mô hình có thể dùng. Quy trình thường gặp: làm sạch văn bản, **tách token**, biểu diễn (bag-of-words hoặc **TF-IDF**, rồi **embedding**), sau đó huấn luyện mô hình cho các tác vụ như cảm xúc, phân loại hay tìm chủ đề.\nHệ thống hiện đại dùng **transformer** (BERT, mô hình ngôn ngữ lớn). NLP thường được áp dụng cho văn bản như thông cáo của ngân hàng trung ương để biến cách diễn đạt thành đặc trưng có thể nghiên cứu cùng các con số.",
+    next:['ml','genai','research'] },
+  { id:'genai', tags:['generative ai','gen ai','genai','llm','llms','large language model','prompt','prompts','prompt engineering','chatgpt','claude','hallucination','hallucinate','rag','ai tao sinh','tri tue nhan tao tao sinh','mo hinh ngon ngu lon','gemini'],
+    title:{en:'Generative AI',vi:'AI tạo sinh'},
+    en:"A **large language model (LLM)** is trained to predict the next token, which lets it write, summarise, translate and code.\n**Good prompts** state a role, the context, the task, the output format and an example.\n**Hallucination**: models can sound confident and still be wrong, so always verify facts. **RAG** (retrieval-augmented generation) reduces this by retrieving trusted documents first and answering from them.\nHuman judgment stays essential: you choose the goal, check the output and own the result.",
+    vi:"**Mô hình ngôn ngữ lớn (LLM)** được huấn luyện để dự đoán token tiếp theo, nhờ đó viết, tóm tắt, dịch và lập trình được.\n**Prompt tốt** nêu vai trò, bối cảnh, nhiệm vụ, định dạng đầu ra và một ví dụ.\n**Hallucination (ảo giác)**: mô hình có thể nói rất tự tin nhưng vẫn sai, nên luôn kiểm chứng thông tin. **RAG** giảm vấn đề này bằng cách truy xuất tài liệu đáng tin trước rồi trả lời dựa trên đó.\nPhán đoán của con người vẫn cốt lõi: bạn chọn mục tiêu, kiểm tra kết quả và chịu trách nhiệm.",
+    next:['nlp','site','study'] },
+  { id:'fomc', tags:['fomc','federal reserve','fed','lai suat','interest rate','interest rates','ty gia','exchange rate','exchange rates','usd vnd','vnd','state bank of vietnam','sbv','federal funds','ngan hang trung uong'],
+    title:{en:'FOMC and VND',vi:'FOMC và VND'},
+    en:"The **FOMC** (Federal Open Market Committee) is the part of the U.S. Federal Reserve that sets the target range for the federal funds rate, meeting about eight times a year. Its decisions and statements move U.S. rates and the dollar, which can reach Vietnam through capital flows, USD/VND pressure and domestic rate expectations.\nThe VND is not freely floating: the State Bank of Vietnam manages a central rate with a trading band. Loi's paper studies how FOMC decisions relate to VND interest and exchange rates using machine learning and NLP.\nThis is general education, not investment advice.",
+    vi:"**FOMC** (Federal Open Market Committee) là bộ phận của Cục Dự trữ Liên bang Mỹ quyết định khoảng lãi suất mục tiêu của federal funds, họp khoảng tám lần mỗi năm. Quyết định và thông cáo của FOMC tác động đến lãi suất Mỹ và đồng USD, và có thể lan sang Việt Nam qua dòng vốn, áp lực tỷ giá USD/VND và kỳ vọng lãi suất trong nước.\nVND không thả nổi hoàn toàn: Ngân hàng Nhà nước Việt Nam điều hành tỷ giá trung tâm với biên độ giao dịch. Bài nghiên cứu của Lợi xem xét mối liên hệ giữa quyết định của FOMC với lãi suất và tỷ giá VND bằng machine learning và NLP.\nĐây là kiến thức tham khảo chung, không phải lời khuyên đầu tư.",
+    next:['research','nlp','ml'] },
+  { id:'roadmap', tags:['roadmap','how to become a data analyst','become data analyst','learn data analysis','learn data','get started','getting started','data analyst career','lo trinh','bat dau hoc','hoc data','tro thanh data analyst','nganh data','beginner'],
+    title:{en:'Data analyst roadmap',vi:'Lộ trình data analyst'},
+    en:"A practical path:\n- **1. Spreadsheets and SQL**: filtering, joins, aggregations\n- **2. Statistics basics**: distributions, correlation, hypothesis tests\n- **3. Python (pandas)**: cleaning and exploring data\n- **4. A BI tool** such as Power BI: model data, build dashboards\n- **5. Projects**: 2 or 3 real datasets, each with a clear question and a written insight\n- **6. Domain knowledge**: finance, operations or marketing\nPublish the projects, like this portfolio.",
+    vi:"Lộ trình thực tế:\n- **1. Bảng tính và SQL**: lọc, join, tổng hợp\n- **2. Thống kê cơ bản**: phân phối, tương quan, kiểm định giả thuyết\n- **3. Python (pandas)**: làm sạch và khám phá dữ liệu\n- **4. Công cụ BI** như Power BI: mô hình dữ liệu, dựng dashboard\n- **5. Dự án**: 2 đến 3 bộ dữ liệu thật, mỗi dự án có câu hỏi rõ ràng và kết luận viết ra\n- **6. Kiến thức ngành**: tài chính, vận hành hoặc marketing\nHãy đăng các dự án lên, như portfolio này.",
+    next:['sql','python','study'] },
+  { id:'study', tags:['study tips','how to study','study method','learn effectively','hoc hieu qua','phuong phap hoc','on thi','time management','quan ly thoi gian','memorize','ghi nho','motivation','tap trung','focus','cach hoc'],
+    title:{en:'Study tips',vi:'Phương pháp học'},
+    en:"Methods that research supports:\n- **Active recall**: close the notes and test yourself.\n- **Spaced repetition**: review after 1 day, 3 days, 1 week.\n- **Learn by projects**: apply each idea to a small real dataset.\n- **Explain it simply** (Feynman technique): if you cannot teach it, revisit it.\n- **Short focused sessions**: 25 to 50 minutes, then a break.",
+    vi:"Những phương pháp được nghiên cứu ủng hộ:\n- **Chủ động nhớ lại**: gập ghi chú lại và tự kiểm tra.\n- **Lặp lại ngắt quãng**: ôn sau 1 ngày, 3 ngày, 1 tuần.\n- **Học qua dự án**: áp dụng từng ý vào một bộ dữ liệu thật nhỏ.\n- **Giải thích đơn giản** (kỹ thuật Feynman): không dạy lại được tức là cần học lại.\n- **Phiên học ngắn, tập trung**: 25 đến 50 phút rồi nghỉ.",
+    next:['roadmap','genai'] },
+  { id:'git', tags:['git','github','github pages','commit','push','deploy','repo','gitignore','branch','pull request','publish website','dang web','dua len web'],
+    title:{en:'Git and GitHub Pages',vi:'Git và GitHub Pages'},
+    en:"Basic Git flow:\n```bash\ngit add .\ngit commit -m \"describe the change\"\ngit push\n```\n**GitHub Pages**: Settings, Pages, then deploy from branch `main` and folder `/ (root)`. The site updates 1 to 2 minutes after a push. If you still see the old version, hard refresh with Ctrl+F5.",
+    vi:"Quy trình Git cơ bản:\n```bash\ngit add .\ngit commit -m \"mô tả thay đổi\"\ngit push\n```\n**GitHub Pages**: Settings, Pages, rồi triển khai từ nhánh `main` và thư mục `/ (root)`. Trang cập nhật sau 1 đến 2 phút kể từ khi push. Nếu vẫn thấy bản cũ, nhấn Ctrl+F5.",
+    next:['site','roadmap'] }
+  ];
+
+  KB.forEach(e => { e._tags = e.tags.map(norm); });
+  const byId = {}; KB.forEach(e => byId[e.id] = e);
+  const START = ['who','exp','skills','sql_join','nlp','contact'];
+
+  function match(raw){
+    const q = norm(raw); if (!q) return null;
+    const tokens = q.split(' '); const padded = ' ' + q + ' ';
+    let best = null, bestScore = 0;
+    KB.forEach(e => {
+      let s = 0;
+      e._tags.forEach(t => {
+        if (t.indexOf(' ') > -1) { if (padded.indexOf(' ' + t + ' ') > -1) s += 3; }
+        else if (tokens.indexOf(t) > -1) s += 2;
+        else if (t.length >= 5 && tokens.some(k => k.length >= t.length && k.indexOf(t) === 0)) s += 1.5;
+      });
+      if (s > bestScore) { bestScore = s; best = e; }
+    });
+    return bestScore >= 2 ? best : null;
+  }
+
+  /* ---- rendering ---- */
+  function scrollDown(){ log.scrollTop = log.scrollHeight; }
+  function addMsg(kind, html, isHtml){
+    const d = document.createElement('div');
+    d.className = 'msg ' + kind;
+    if (isHtml) d.innerHTML = html; else d.textContent = html;
+    log.appendChild(d); scrollDown(); return d;
+  }
+  function setChips(ids, l){
+    chips.innerHTML = '';
+    ids.forEach(id => {
+      const e = byId[id]; if (!e) return;
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = e.title[l];
+      b.addEventListener('click', () => answer(byId[id], e.title[l], l));
+      chips.appendChild(b);
+    });
+  }
+  function applyLang(){
+    const u = UI[lang];
+    $('chatTitle').textContent = u.title; $('chatSub').textContent = API ? u.subAI : u.sub;
+    input.placeholder = u.ph; closeBtn.setAttribute('aria-label', u.close);
+    fab.setAttribute('aria-label', u.open);
+    langBtn.textContent = u.toggle; langBtn.setAttribute('aria-label', u.switchLabel);
+    document.documentElement.setAttribute('data-chat-lang', lang);
+  }
+  function entryText(e, l){ const v = e[l]; return typeof v === 'function' ? v() : v; }
+
+  function answer(entry, userLabel, l){
+    addMsg('user', userLabel, false);
+    reply(() => {
+      if (!entry) { addMsg('bot', fmt(UI[l].fallback), true); setChips(START, l); return; }
+      addMsg('bot', fmt(entryText(entry, l)), true);
+      const next = (entry.next || []).slice(0,3);
+      setChips(next.length ? next : START, l);
+    });
+  }
+  function reply(fn){
+    if (reduce) { fn(); return; }
+    const t = addMsg('bot', '<span class="typing" aria-label="typing"><i></i><i></i><i></i></span>', true);
+    setTimeout(() => { t.remove(); fn(); }, 380);
+  }
+
+  function ask(raw){
+    const text = raw.trim().slice(0, 300); if (!text) return;
+    const tokens = norm(text).split(' ');
+    const l = detect(text, tokens);
+    if (l !== lang) { lang = l; applyLang(); }
+    if (API) { askAI(text, l); } else { answer(match(text), text, l); }
+  }
+
+  async function askAI(text, l){
+    if (busy) return;
+    busy = true; input.disabled = true;
+    addMsg('user', text, false);
+    const typing = addMsg('bot', '<span class="typing" aria-label="typing"><i></i><i></i><i></i></span>', true);
+    const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 25000);
+    try {
+      const msgs = hist.concat([{ role:'user', content:text }]).slice(-10);
+      const res = await fetch(API, { method:'POST', headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ messages: msgs }), signal: ctrl.signal });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      if (!data || typeof data.reply !== 'string' || !data.reply) throw new Error('empty');
+      typing.remove(); addMsg('bot', fmt(data.reply), true);
+      hist.push({ role:'user', content:text }, { role:'assistant', content:data.reply });
+      if (hist.length > 10) hist.splice(0, hist.length - 10);
+      setChips(START, l);
+    } catch (err) {
+      typing.remove();
+      const e = match(text);
+      addMsg('bot', fmt((e ? entryText(e, l) : UI[l].fallback) + '\n\n(' + UI[l].offline + ')'), true);
+      const next = e && e.next ? e.next.slice(0,3) : [];
+      setChips(next.length ? next : START, l);
+    } finally {
+      clearTimeout(timer); busy = false; input.disabled = false; input.focus();
+    }
+  }
+
+  /* ---- open / close ---- */
+  function openChat(){
+    panel.hidden = false; fab.setAttribute('aria-expanded', 'true');
+    const dot = fab.querySelector('.dot'); if (dot) dot.remove();
+    if (!opened) { opened = true; applyLang(); addMsg('bot', fmt(API ? UI[lang].helloAI : UI[lang].hello), true); setChips(START, lang); }
+    setTimeout(() => input.focus(), 50);
+  }
+  function closeChat(){ panel.hidden = true; fab.setAttribute('aria-expanded', 'false'); fab.focus(); }
+
+  fab.addEventListener('click', () => panel.hidden ? openChat() : closeChat());
+  closeBtn.addEventListener('click', closeChat);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) closeChat(); });
+  form.addEventListener('submit', (e) => { e.preventDefault(); const v = input.value; input.value = ''; ask(v); });
+  langBtn.addEventListener('click', () => {
+    lang = lang === 'en' ? 'vi' : 'en'; applyLang();
+    log.innerHTML = ''; hist.length = 0; addMsg('bot', fmt(API ? UI[lang].helloAI : UI[lang].hello), true); setChips(START, lang);
+  });
+  applyLang();
 })();
 </script>
 </body>
